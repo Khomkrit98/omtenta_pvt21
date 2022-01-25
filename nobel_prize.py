@@ -1,17 +1,12 @@
 # import sys
-import requests
-
-# Tips: använd sidan nedan för att se vilken data vi får tillbaks och hur apiet fungerar
-# vi använder oss enbart av /nobelPrizes
-# Dokumentation, hjälp samt verktyg för att testa apiet fins här:
-# https://app.swaggerhub.com/apis/NobelMedia/NobelMasterData/2.1
+from Iterations.tentamen_2021.omtenta_pvt21.nobel_prize_api import get_prize_data
 
 HELP_STRING = """
-Ange ett år och fält
-Exempelvis 1965 fysik
+Ange ett år och fält.
+Exempelvis: 1965 fysik.
 Fält: fysik, kemi, litteratur, ekonomi, fred, medicin.
-Ange Q för att avsluta programmet
-Ange H för att  skriva ut Hjälp texten
+Ange Q för att avsluta programmet.
+Ange H för att  skriva ut Hjälp texten igen.
 """
 
 fields = {"fysik": "phy",
@@ -36,17 +31,18 @@ def main():
             break
         if user_input.upper() == "H":
             print(HELP_STRING)
+
         years, field = user_input.split()
         category = fields[field]
 
         category = {"nobelPrizeYear": int(years), "nobelPrizeCategory": category}
 
-        data_from_api = requests.get("http://api.nobelprize.org/2.1/nobelPrizes", params=category).json()
-        # TODO 5p  Lägg till någon typ av avskiljare mellan pristagare, exempelvis --------------------------
+        data_from_api = get_prize_data(category)
         print_prize(data_from_api)
-        # TODO 15p Skriv ut hur mycket pengar varje pristagare fick, tänk på att en del priser delas mellan flera mottagare, skriv ut både i dåtidens pengar och dagens värde
-        #   Skriv ut med tre decimalers precision. exempel 534515.123
-        # Feynman fick exempelvis 1/3 av priset i fysik 1965, vilket borde gett ungefär 282000/3 kronor i dåtidens penningvärde
+        # TODO 15p Skriv ut hur mycket pengar varje pristagare fick, tänk på att en del priser delas mellan flera
+        #  mottagare, skriv ut både i dåtidens pengar och dagens värde Skriv ut med tre decimalers precision. exempel
+        #  534515.123 Feynman fick exempelvis 1/3 av priset i fysik 1965, vilket borde gett ungefär 282000/3 kronor i
+        #  dåtidens penningvärde
 
 
 def print_prize(res):
@@ -58,6 +54,7 @@ def print_prize(res):
         for recipient in prize["laureates"]:
             print(recipient['knownName']['en'])
             print(recipient['motivation']['en'])
+            print("-"*130)
             # andel = recipient['portion']
 
 
