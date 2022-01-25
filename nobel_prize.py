@@ -1,4 +1,4 @@
-import sys
+# import sys
 import requests
 
 # Tips: använd sidan nedan för att se vilken data vi får tillbaks och hur apiet fungerar
@@ -8,6 +8,9 @@ import requests
 HELP_STRING = """
 Ange ett år och fält
 Exempelvis 1965 fysik
+Fält: fysik, kemi, litteratur, ekonomi, fred, medicin.
+Ange Q för att avsluta programmet
+Ange H för att  skriva ut Hjälp texten
 """
 
 cat = {"fysik": "phy",
@@ -18,30 +21,24 @@ cat = {"fysik": "phy",
        "medicin": "med"}
 
 
-
-# TODO 10p programmet skall ge en hjälpsam utskrift istället för en krasch om användaren skriver in fel input
-# TODO 15p om användaren inte anger ett område som exempelvis fysik eller kemi så skall den parametern inte skickas med till apiet och vi får då alla priser det året
-
-
-
+# TODO 10p programmet skall ge en hjälpsam utskrift istället för en krasch om användaren skriver in fel input TODO
+#  15p om användaren inte anger ett område som exempelvis fysik eller kemi så skall den parametern inte skickas med
+#  till apiet och vi får då alla priser det året
 
 
 def main():
-
+    print(HELP_STRING)
     while True:
-        print(HELP_STRING)
-        # TODO 5p Skriv bara ut hjälptexten en gång när programmet startar inte efter varje gång användaren matat in en fråga
-        #      Förbättra hjälputskriften så att användaren vet vilka fält, exempelvis kemi som finns att välja på
-
-        # TODO 5p Gör så att det finns ett sätt att avsluta programmet, om användaren skriver Q så skall programmet stängas av
-        #      Beskriv i hjälptexten hur man avslutar programmet
         # TODO 5p Gör så att hjälptexten skrivs ut om användaren skriver h eller H
         thy_command = input(">")
+        if thy_command.upper() == "Q":
+            break
+        if thy_command.upper() == "H":
+            print(HELP_STRING)
         a, b = thy_command.split()
         c = cat[b]
 
-
-        c = {"nobelPrizeYear": int(a),"nobelPrizeCategory":c}
+        c = {"nobelPrizeYear": int(a), "nobelPrizeCategory": c}
 
         res = requests.get("http://api.nobelprize.org/2.1/nobelPrizes", params=c).json()
         # TODO 5p  Lägg till någon typ av avskiljare mellan pristagare, exempelvis --------------------------
