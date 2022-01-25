@@ -1,6 +1,5 @@
 # import sys
 # from dataclasses import field
-
 # import pprint
 
 from Iterations.tentamen_2021.omtenta_pvt21.nobel_prize_api import get_prize_data
@@ -44,21 +43,21 @@ def main():
         data_from_api = get_prize_data(category)
         # pprint.pprint(data_from_api)
         print_prize(data_from_api)
-        # TODO 15p Skriv ut hur mycket pengar varje pristagare fick, tänk på att en del priser delas mellan flera
-        #  mottagare, skriv ut både i dåtidens pengar och dagens värde Skriv ut med tre decimalers precision. exempel
-        #  534515.123 Feynman fick exempelvis 1/3 av priset i fysik 1965, vilket borde gett ungefär 282000/3 kronor i
-        #  dåtidens penningvärde
 
 
 def print_prize(res):
     for prize in res["nobelPrizes"]:
         prize_amount = prize["prizeAmount"]
-        # idagpeng = prize["prizeAmountAdjusted"]
-        print(f"{prize['categoryFullName']['se']} prissumma {prize_amount} SEK")
+        prize_amount_adjusted = prize["prizeAmountAdjusted"]
+        print(
+            f"{prize['categoryFullName']['se']} "
+            f"prissumma {prize_amount} SEK justerad för inflation {prize_amount_adjusted}")
 
         for recipient in prize["laureates"]:
+            portion = 1 / len(prize['laureates'])
             print(recipient['knownName']['en'])
             print(recipient['motivation']['en'])
+            print(f"{prize_amount * portion:.3f} justerat för inflation {prize_amount_adjusted * portion:.3f}")
             print("-" * 130)
             # andel = recipient['portion']
             print("\n")
