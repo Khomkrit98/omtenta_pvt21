@@ -1,4 +1,8 @@
 # import sys
+# from dataclasses import field
+
+# import pprint
+
 from Iterations.tentamen_2021.omtenta_pvt21.nobel_prize_api import get_prize_data
 
 HELP_STRING = """
@@ -6,38 +10,39 @@ Ange ett år och fält.
 Exempelvis: 1965 fysik.
 Fält: fysik, kemi, litteratur, ekonomi, fred, medicin.
 Ange Q för att avsluta programmet.
-Ange H för att  skriva ut Hjälp texten igen.
+Ange H för att skriva ut hjälp texten igen.
 """
 
-fields = {"fysik": "phy",
-          "kemi": "che",
-          "litteratur": "lit",
-          "ekonomi": "eco",
-          "fred": "pea",
-          "medicin": "med"}
+feild = {"fysik": "phy",
+         "kemi": "che",
+         "litteratur": "lit",
+         "ekonomi": "eco",
+         "fred": "pea",
+         "medicin": "med"}
 
 
-# TODO 10p programmet skall ge en hjälpsam utskrift istället för en krasch om användaren skriver in fel input TODO
-#  15p om användaren inte anger ett område som exempelvis fysik eller kemi så skall den parametern inte skickas med
-#  till apiet och vi får då alla priser det året
+def get_user_input() -> list:
+    return input(">").split()
 
 
 def main():
     print(HELP_STRING)
     while True:
-        # TODO 5p Gör så att hjälptexten skrivs ut om användaren skriver h eller H
-        user_input = input(">")
-        if user_input.upper() == "Q":
+        user_input = get_user_input()
+        if 'q' in user_input:
             break
-        if user_input.upper() == "H":
-            print(HELP_STRING)
 
-        years, field = user_input.split()
-        category = fields[field]
-
-        category = {"nobelPrizeYear": int(years), "nobelPrizeCategory": category}
+        years = user_input[0]
+        if len(user_input) == 1:
+            years = user_input[0]
+            category = {"nobelPrizeYear": int(years)}
+        else:
+            field = user_input[1]
+            category = feild[field]
+            category = {"nobelPrizeYear": int(years), "nobelPrizeCategory": category}
 
         data_from_api = get_prize_data(category)
+        # pprint.pprint(data_from_api)
         print_prize(data_from_api)
         # TODO 15p Skriv ut hur mycket pengar varje pristagare fick, tänk på att en del priser delas mellan flera
         #  mottagare, skriv ut både i dåtidens pengar och dagens värde Skriv ut med tre decimalers precision. exempel
@@ -54,8 +59,9 @@ def print_prize(res):
         for recipient in prize["laureates"]:
             print(recipient['knownName']['en'])
             print(recipient['motivation']['en'])
-            print("-"*130)
+            print("-" * 130)
             # andel = recipient['portion']
+            print("\n")
 
 
 if __name__ == '__main__':
