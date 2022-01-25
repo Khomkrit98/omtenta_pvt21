@@ -1,7 +1,4 @@
-# import sys
-# from dataclasses import field
-# import pprint
-
+# Hämtar från ett annat modul
 from Iterations.tentamen_2021.omtenta_pvt21.nobel_prize_api import get_prize_data
 
 HELP_STRING = """
@@ -20,10 +17,12 @@ feild = {"fysik": "phy",
          "medicin": "med"}
 
 
+# användarens input
 def get_user_input() -> list:
     return input(">").split()
 
 
+# användaren kan skriva in år och fält på samma rad
 def main():
     print(HELP_STRING)
     while True:
@@ -31,6 +30,10 @@ def main():
         if 'q' in user_input:
             break
 
+        # i f 'h' in get_user_input:
+        # print(HELP_STRING)
+        # Användaren kan antingen ange fält eller år
+        # Åretalet 1970 fungerar att skriva in utan att ange ett fält
         years = user_input[0]
         if len(user_input) == 1:
             years = user_input[0]
@@ -49,6 +52,9 @@ def print_prize(res):
     for prize in res["nobelPrizes"]:
         print_nobel_prize(prize)
 
+
+# prispengar för deltagare justerad efter inflation
+# Hur mycket pengar varje pristagare fick ( med 3 decimalet)
 
 def print_nobel_prize(prize):
     prize_amount = prize["prizeAmount"]
